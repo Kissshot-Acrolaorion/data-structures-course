@@ -34,6 +34,7 @@ public:
     bool Empty(){return Length==0;}
     void PrintList();
     void DestroyList();
+    ~CSLinkList(){DestroyList();}
 };
 
 template<class T>

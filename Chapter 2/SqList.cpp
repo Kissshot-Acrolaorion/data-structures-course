@@ -23,7 +23,7 @@ public:
 	bool Empty(){return Length==0;}
 	void PrintList();
 	void DestroyList(){delete[] data;}
-	 
+	~SqList(){delete[] data;}
 };
 template<class T>
 int SqList<T>::LocateElem(T e)

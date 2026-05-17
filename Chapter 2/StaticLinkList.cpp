@@ -34,6 +34,7 @@ public:
     bool Empty(){return Length==0;}
     void PrintList();
     void DestroyList(){delete[] data,InitList();}
+    ~StaticLinkList(){DestroyList();}
 };
 template<class T>
 bool StaticLinkList<T>::HeadInsert(T e)

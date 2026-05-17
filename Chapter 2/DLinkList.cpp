@@ -34,7 +34,7 @@ public:
     bool Empty(){return Length==0;}
     void PrintList();
     void DestroyList();
-
+	~DLinkList(){DestroyList();}
 };
 template<class T>
 bool DLinkList<T>::HeadInsert(T e)
