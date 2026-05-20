@@ -39,11 +39,3 @@ bool SqQueue<T>::Pop()
     if(Empty()) return 0;
     front=(front+1)%MaxSize; return 1;
 }
-
-signed main()
-{
-    SqQueue<int> q;
-    for(int i=1;i<=10;i++) q.Push(i);
-    while(!q.Empty()) cout<<q.Front()<<' ',q.Pop();
-    return 0;
-}
