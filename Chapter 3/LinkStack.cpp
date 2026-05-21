@@ -74,17 +74,3 @@ bool LinkStack<T>::Pop()
     delete p;
     return 1;
 }
-
-signed main()
-{
-    int b,n;
-    cin>>b>>n;
-    LinkStack<int> s;
-    while(n)
-    {
-        s.Push(n%b);
-        n/=b;
-    }
-    while(!s.Empty()) cout<<s.Top(),s.Pop();
-    return 0;
-}

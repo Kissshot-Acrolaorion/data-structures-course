@@ -30,3 +30,12 @@ void QuickSort(vector<T>& arr,int l,int r)
     QuickSort(arr,l,i);
     QuickSort(arr,i+1,r);
 }
+
+void Print(vector<int>& arr)
+{
+    for(int i=0;i<arr.size();i++)
+    {
+        cout<<arr[i];
+        i==arr.size()-1?cout<<endl:cout<<" ";
+    }
+}
