@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
-
-
+#define PII pair<int,int>
+#define pq priority_queue
 template<class T>
 struct Node{
     T data;
@@ -9,60 +9,65 @@ struct Node{
     Node():data(0),left(nullptr),right(nullptr){}
 
 };
+
 template<class T>
-class LinkBinTree{
+class HuffmanTree{
 private:
-    Node<T>* root;
-    Node<T>* pre_in(vector<T> pre,vector<T> in);
-    Node<T>* post_in(vector<T> post,vector<T> in);
-
+    Node<T>* root;  
+    string GetCode(Node<T>* u,T target,string path);
 public:
-    LinkBinTree():root(nullptr){}
-    LinkBinTree(Node<T>* r):root(r){}
-    void InitLinkBinTree(){root=nullptr;}
-    void InitLinkBinTree(Node<T>* r){root=r;}
-
-    void CreateLinkBinTree_pre_in(vector<T> pre,vector<T> in) {root=pre_in(pre,in);}
-    void CreateLinkBinTree_post_in(vector<T> post,vector<T> in) {root=post_in(post,in);}
-    
-    vector<T> PreOrder();
-    vector<T> InOrder();
-    vector<T> PostOrder();
-    vector<T> LevelOrder();
+    HuffmanTree():root(nullptr){}
+    void BuildHuffmanTree(vector<T>& data,vector<int>& freq);
 
     void PreOrder(Node<T>* u,vector<T>& res);
     void InOrder(Node<T>* u,vector<T>& res);
     void PostOrder(Node<T>* u,vector<T>& res);
 
+    vector<T> PreOrder();
+    vector<T> InOrder();
+    vector<T> PostOrder();
+    vector<T> LevelOrder();
+
+    string Code(T target){return GetCode(root,target,"");}
+    
 };
-
-
 template<class T>
-Node<T>* LinkBinTree<T>::pre_in(vector<T> pre,vector<T> in)
+string HuffmanTree<T>::GetCode(Node<T>* u,T target,string path)
 {
-    if(pre.empty()||in.empty()) return nullptr;
-    int root_idx=find(in.begin(),in.end(),pre[0])-in.begin();
-    Node<T>* node=new Node<T>();
-    node->data=pre[0];
-    node->left = LinkBinTree<T>::pre_in(vector<T>(pre.begin()+1,pre.begin()+1+root_idx),vector<T>(in.begin(),in.begin()+root_idx));
-    node->right = LinkBinTree<T>::pre_in(vector<T>(pre.begin()+1+root_idx,pre.end()),vector<T>(in.begin()+root_idx+1,in.end()));
-    return node;
+    if(u==nullptr) return "";
+    if(u->data==target) return path;
+    
+    string left=GetCode(u->left,target,path+"0");
+    if(left!="") return left;
+    return GetCode(u->right,target,path+"1");
 }
 
 template<class T>
-Node<T>* LinkBinTree<T>::post_in(vector<T> post,vector<T> in)
+void HuffmanTree<T>::BuildHuffmanTree(vector<T>& data,vector<int>& freq)
 {
-    if(post.empty()||in.empty()) return nullptr;
-    int root_idx=find(in.begin(),in.end(),post.back())-in.begin();
-    Node<T>* node=new Node<T>();
-    node->data=post.back();
-    node->left = LinkBinTree<T>::post_in(vector<T>(post.begin(),post.begin()+root_idx),vector<T>(in.begin(),in.begin()+root_idx));
-    node->right = LinkBinTree<T>::post_in(vector<T>(post.begin()+root_idx,post.end()-1),vector<T>(in.begin()+root_idx+1,in.end()));
-    return node;
+    auto cmp=[](Node<T>* a,Node<T>* b){return a->data>b->data;};
+    pq<Node<T>*,vector<Node<T>*>,decltype(cmp)> pq(cmp);
+    for(int i=0;i<data.size();i++)
+    {
+        Node<T>* node=new Node<T>();
+        node->data=freq[i];
+        pq.push(node);
+    }
+    while(pq.size()>1)
+    {
+        Node<T>* left=pq.top();pq.pop();
+        Node<T>* right=pq.top();pq.pop();
+        Node<T>* parent=new Node<T>();
+        parent->data=left->data+right->data;
+        parent->left=left;
+        parent->right=right;
+        pq.push(parent);
+    }
+    root=pq.top();
 }
 
 template<class T>
-vector<T> LinkBinTree<T>::PreOrder()
+vector<T> HuffmanTree<T>::PreOrder()
 {
     vector<T> res;
     stack<Node<T>*> s;
@@ -78,7 +83,7 @@ vector<T> LinkBinTree<T>::PreOrder()
     return res;
 }
 template<class T>
-vector<T> LinkBinTree<T>::InOrder()
+vector<T> HuffmanTree<T>::InOrder()
 {
     vector<T> res;
     stack<Node<T>*> s;
@@ -97,7 +102,7 @@ vector<T> LinkBinTree<T>::InOrder()
     return res;
 }
 template<class T>
-vector<T> LinkBinTree<T>::PostOrder()
+vector<T> HuffmanTree<T>::PostOrder()
 {
     vector<T> res;
     stack<Node<T>*> s;
@@ -114,7 +119,7 @@ vector<T> LinkBinTree<T>::PostOrder()
     return res;
 }
 template<class T>
-vector<T> LinkBinTree<T>::LevelOrder()
+vector<T> HuffmanTree<T>::LevelOrder()
 {
     vector<T> res;
     queue<Node<T>*> q;
@@ -131,7 +136,7 @@ vector<T> LinkBinTree<T>::LevelOrder()
 }
 
 template<class T>
-void LinkBinTree<T>::PreOrder(Node<T>* u,vector<T>& res)
+void HuffmanTree<T>::PreOrder(Node<T>* u,vector<T>& res)
 {    if(u==nullptr) return;
     res.push_back(u->data);
     PreOrder(u->left,res);
@@ -139,7 +144,7 @@ void LinkBinTree<T>::PreOrder(Node<T>* u,vector<T>& res)
 }
 
 template<class T>
-void LinkBinTree<T>::InOrder(Node<T>* u,vector<T>& res)
+void HuffmanTree<T>::InOrder(Node<T>* u,vector<T>& res)
 {
     if(u==nullptr) return;
     InOrder(u->left,res);
@@ -147,7 +152,7 @@ void LinkBinTree<T>::InOrder(Node<T>* u,vector<T>& res)
     InOrder(u->right,res);
 }
 template<class T>
-void LinkBinTree<T>::PostOrder(Node<T>* u,vector<T>& res)
+void HuffmanTree<T>::PostOrder(Node<T>* u,vector<T>& res)
 {
     if(u==nullptr) return;
     PostOrder(u->left,res);
