@@ -22,3 +22,12 @@ void MergeSort(vector<T>& arr,int l,int r)
     for(i=l;i<=r;i++)
         arr[i]=tmp[i-l];
 }
+
+void Print(vector<int>& arr)
+{
+    for(int i=0;i<arr.size();i++)
+    {
+        cout<<arr[i];
+        i==arr.size()-1?cout<<endl:cout<<" ";
+    }
+}

@@ -310,23 +310,3 @@ void BalanceBinTree<T>::PostOrder(Node<T>* u,vector<T>& res)
     PostOrder(u->right,res);
     res.push_back(u->data);
 }
-
-signed main()
-{
-    BalanceBinTree<int> tree;
-    tree.Insert(10);
-    tree.Insert(20);
-    tree.Insert(30);
-    tree.Insert(40);
-    tree.Insert(50);
-    tree.Insert(25);
-    
-    vector<int> pre=tree.PreOrder();
-    vector<int> in=tree.InOrder();
-    
-    for (int x:pre) cout<<x<<" ";
-    cout<<endl;
-    for (int x:in) cout<<x<<" ";
-    cout<<endl;
-    return 0;
-}
